@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B3ANZ | Graffiti Culture Mexico</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Rubik+Glitch&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+           
+            --bg-dark: #111111;
+            --bg-concrete: #1a1a1a;
+            --text-main: #e0e0e0;
+            --accent-green: #39ff14; /* Verde neón tóxico */
+            --accent-purple: #bd00ff; /* Morado intenso */
+            --font-tag: 'Rubik Glitch', display; /* Para títulos grandes */
+            --font-marker: 'Permanent Marker', cursive; /* Para subtítulos */
+            --font-body: 'Share Tech Mono', monospace; /* Para texto legible pero técnico */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Efecto de ruido/grano para textura de pared vieja */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* --- TIPOGRAFÍA Y ESTILOS GENERALES --- */
+        h1, h2, h3 {
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        .section-title {
+            font-family: var(--font-marker);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--accent-purple);
+            text-shadow: 2px 2px 0px #fff;
+            transform: rotate(-2deg); /* Ligera rotación para imperfección */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- HERO SECTION (INICIO) --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #2a2a2a 0%, #000 100%);
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* EL LOGO B3ANZ */
+        .hero-logo {
+            font-family: var(--font-tag);
+            font-size: 15vw; /* Responsivo gigante */
+            letter-spacing: -5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-logo span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        /* La "A" gigante y diferente */
+        .hero-logo .big-a {
+            font-size: 1.3em; /* 30% más grande que el resto */
+            color: var(--accent-green);
+            transform: translateY(10px) rotate(5deg);
+            text-shadow: 0 0 20px rgba(229, 20, 255, 0.67); /* Resplandor neón */
+        }
+
+        .hero-tagline {
+            font-family: var(--font-marker);
+            font-size: 1.5rem;
+            margin-top: 1rem;
+            color: #fff;
+            background: var(--accent-purple);
+            padding: 5px 15px;
+            transform: skew(-10deg);
+        }
+
+        /* --- SECCIÓN IDENTIDAD --- */
+        .identity {
+            padding: 80px 0;
+            background-color: var(--bg-concrete);
+            border-top: 5px solid var(--accent-green);
+        }
+
+        .identity-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .highlight {
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        /* --- GALERÍA (GRID URBANO) --- */
+        .gallery {
+            padding: 80px 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1 / 1; /* Cuadrados perfectos */
+            background-color: #333;
+            overflow: hidden;
+            border: 2px solid #444;
+            transition: border-color 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            border-color: var(--accent-green);
+        }
+
+        /* Placeholder de imagen (puedes poner <img> real aquí) */
+        .placeholder-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: linear-gradient(45deg, #222, #333);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #555;
+            font-family: var(--font-tag);
+            font-size: 2rem;
+            transition: transform 0.5s ease, filter 0.3s ease;
+            /* Blanco y negro por defecto */
+            
+        }
+
+        .gallery-item:hover .placeholder-img {
+           
+            filter: grayscale(0%); /* Color al hover */
+        }
+
+        /* --- INTEGRANTES (CREW) --- */
+        .crew {
+            padding: 80px 0;
+            background: var(--bg-concrete);
+            text-align: center;
+        }
+
+        .crew-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .crew-member {
+            font-family: var(--font-tag);
+            font-size: 2.5rem;
+            color: #fff;
+            position: relative;
+        }
+
+        /* Efecto de spray bajo el nombre */
+        .crew-member::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 10px;
+            background: var(--accent-purple);
+            filter: blur(8px);
+            opacity: 0.7;
+            margin-top: -10px;
+        }
+
+        /* --- REDES SOCIALES --- */
+        .socials {
+            padding: 100px 0;
+            text-align: center;
+            background: radial-gradient(circle, #222 0%, #000 100%);
+        }
+
+        .insta-btn {
+            display: inline-block;
+            text-decoration: none;
+            font-family: var(--font-marker);
+            font-size: 2rem;
+            color: var(--bg-dark);
+            background-color: var(--accent-green);
+            padding: 15px 40px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 5px 5px 0px #fff;
+        }
+
+        .insta-btn:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #fff;
+            background-color: #fff;
+            color: #000;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 40px 20px;
+            background-color: #000;
+            text-align: center;
+            border-top: 1px solid #333;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .footer-names {
+            margin-bottom: 10px;
+            word-spacing: 15px;
+            color: #444;
+            font-family: var(--font-tag);
+        }
+
+        /* --- UTILIDADES RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero-logo { font-size: 20vw; }
+            .section-title { font-size: 2rem; }
+            .crew-member { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero" id="inicio">
+        <div class="hero-logo">
+            <span>B3</span><span class="big-a">A</span><span>NZ</span>
+        </div>
+        <div class="hero-tagline">
+            CREW
+        </div>
+    </section>
+
+    <section class="identity">
+        <div class="container">
+            <h2 class="section-title">LA CLIKA</h2>
+            <div class="identity-content">
+                <p>
+                Somos <span class="highlight">B3ANZ</span>, cinco cabrones de QRO rompiendo muros grises.
+                </p>
+                <br>
+                <p>
+                   No buscamos fama de galería. Esto es identidad. <span class="highlight">Vandalismo chafa.</span> 
+                </p>
+                <br>
+                <p style="font-family: var(--font-marker); font-size: 1.4rem;">
+                    "No pintamos para que nos veas, pintamos para que sepas que estuvimos ahí."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <div class="container">
+            <h2 class="section-title">TRAZOS</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="placeholder-img" style="background: #2a2a2a;">TAGS<img src="" ></div>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-img" style="background: #222;">TAGS<img src="" ></div>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-img" style="background: #1f1f1f;">BOMBA<img src="" ></div>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-img" style="background: #252525;">PIEZA<img src="" ></div>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-img" style="background: #1c1c1c;">COLOR<img src="" ></div>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-img" style="background: #2a2a2a;">STREET<img src="" ></div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+    <a href="galeria.html" style="
+        font-family: 'Permanent Marker'; 
+        font-size: 1.5rem; 
+        color: #111; 
+        background-color: #39ff14; 
+        padding: 10px 30px; 
+        text-decoration: none; 
+        border: 2px solid #fff;
+        display: inline-block;
+        transform: rotate(-1deg);
+    ">
+        VER GALERÍA COMPLETA →
+    </a>
+</div>
+    </section>
+
+    <section class="crew">
+        <div class="container">
+            <h2 class="section-title">LA PEOPLE</h2>
+            <ul class="crew-list">
+                <li class="crew-member">SYKO</li>
+                <li class="crew-member">REEKE</li>
+                <li class="crew-member">ANTA</li>
+                <li class="crew-member">UNLOST (LST)</li>
+                <li class="crew-member">L1TTL3-F0URLOK0</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="socials">
+        <div class="container">
+            <h2 class="section-title" style="color: #fff; text-shadow: none;">¿QUIERES VER MÁS?</h2>
+            <a href="https://www.instagram.com/b3anz_gang?igsh=MWwxYWxsOGQ4aGZudA==" target="_blank" class="insta-btn">
+                WACHA EL INSTAGRAM
+            </a>
+            <p style="margin-top: 20px; color: #888;">.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-names">
+            SYKO REEKE ANTA UNLOST L1TTL3-F0URLOK0
+        </div>
+        <p>&copy; 2026 B3ANZ CREW MEX.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animación simple de aparición
+            const observerOptions = {
+                threshold: 0.2
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Seleccionar elementos a animar
+            const sections = document.querySelectorAll('section h2, .identity-content, .gallery-grid, .crew-list');
+            
+            sections.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.8s ease-out';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
