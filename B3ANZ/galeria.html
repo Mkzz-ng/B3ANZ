@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B3ANZ | El Muro</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Rubik+Glitch&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES IGUALES AL HOME --- */
+        :root {
+            --bg-dark: #111111;
+            --bg-modal: rgba(0, 0, 0, 0.95);
+            --text-main: #e0e0e0;
+            --accent-green: #39ff14;
+            --accent-purple: #bd00ff;
+            --font-tag: 'Rubik Glitch', display;
+            --font-marker: 'Permanent Marker', cursive;
+            --font-body: 'Share Tech Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+        }
+
+        /* Textura de fondo (Ruido) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* --- HEADER DE NAVEGACIÓN --- */
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(17, 17, 17, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #333;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--bg-dark);
+            background: var(--text-main);
+            padding: 8px 20px;
+            font-family: var(--font-marker);
+            font-size: 1.2rem;
+            transform: skew(-10deg);
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--accent-green);
+            box-shadow: 3px 3px 0 var(--accent-purple);
+        }
+
+        .gallery-title {
+            font-family: var(--font-tag);
+            font-size: 2rem;
+            color: var(--accent-purple);
+            text-shadow: 2px 2px 0 #fff;
+        }
+
+        /* --- GRID DE ARTE (RESPONSIVE) --- */
+        .art-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            column-count: 4; /* Default para PC grande */
+            column-gap: 15px;
+        }
+
+        /* Tarjeta de arte individual */
+        .art-card {
+            background: #1a1a1a;
+            margin-bottom: 15px;
+            break-inside: avoid; /* Evita que las fotos se corten entre columnas */
+            border: 1px solid #333;
+            transition: transform 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .art-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-green);
+        }
+
+        .art-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(100%) contrast(1.2);
+            transition: filter 0.4s ease;
+        }
+
+        .art-card:hover img {
+            filter: grayscale(0%) contrast(1);
+        }
+
+        /* Info oculta que aparece al hover */
+        .art-info {
+            padding: 10px;
+            background: var(--accent-green);
+            color: #000;
+            font-family: var(--font-marker);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            transform: translateY(100%);
+        }
+
+        .art-card:hover .art-info {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- LIGHTBOX / MODAL (Zoom) --- */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-modal);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .lightbox.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .lightbox-img {
+            max-width: 95%;
+            max-height: 85vh;
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
+        }
+
+        .lightbox-caption {
+            margin-top: 15px;
+            color: #fff;
+            font-family: var(--font-tag);
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 3rem;
+            cursor: pointer;
+            font-family: var(--font-marker);
+            transition: 0.2s;
+        }
+
+        .close-lightbox:hover { color: var(--accent-purple); }
+
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 1024px) {
+            .art-container { column-count: 3; }
+        }
+        @media (max-width: 768px) {
+            .art-container { column-count: 2; }
+            .gallery-title { font-size: 1.5rem; }
+        }
+        @media (max-width: 480px) {
+            .art-container { column-count: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-btn">← REGRESAR</a>
+        <div class="gallery-title">EL MURO B3ANZ</div>
+        <div style="width: 80px;"></div> 
+    </header>
+
+    <div class="art-container">
+        
+        <div class="art-card" onclick="openLightbox(this)">
+            <img src="SYKO1.jpeg" alt="Wildstyle piece">
+            <div class="art-info">WILDSTYLE // SYKO</div>
+        </div>
+
+        <div class="art-card" onclick="openLightbox(this)">
+            <img src="REEKE&SYKO.jpeg" alt="Personaje">
+            <div class="art-info">CHARACTER // VIBE</div>
+        </div>
+
+        <div class="art-card" onclick="openLightbox(this)">
+            <img src="LSTTAG1.jpeg" alt="Bomba">
+            <div class="art-info">TAG // LST</div>
+        </div>
+
+        <div class="art-card" onclick="openLightbox(this)">
+            <img src="SKULL.jpeg" alt="Muro completo">
+            <div class="art-info">GANG // CREW</div>
+        </div>
+
+        <div class="art-card" onclick="openLightbox(this)">
+            <img src="B3ANZTAG1.jpeg" alt="Boceto">
+            <div class="art-info">TAG // CREW</div>
+        </div>
+
+        <div class="art-card" onclick="openLightbox(this)">
+            <img src="ANTATAG1.jpeg" alt="Panorámica">
+            <div class="art-info">TAG// ANTA</div>
+        </div>
+ <div class="art-card" onclick="openLightbox(this)">
+            <img src="" alt="Panorámica">
+            <div class="art-info">??? // ???</div>
+        </div>
+
+         </div>
+
+    <div class="lightbox" id="lightbox">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <img src="" alt="Zoom Art" class="lightbox-img" id="lightbox-img">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+
+        // Función para abrir
+        function openLightbox(card) {
+            const img = card.querySelector('img');
+            const info = card.querySelector('.art-info');
+            
+            // Pasar la imagen y texto al modal
+            lightboxImg.src = img.src;
+            lightboxCaption.innerText = info.innerText;
+            
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Evita scroll al abrir
+        }
+
+        // Función para cerrar
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Reactiva scroll
+        }
+
+        // Cerrar al hacer clic fuera de la imagen
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+        
+        // Cerrar con tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") closeLightbox();
+        });
+    </script>
+</body>
+</html>
